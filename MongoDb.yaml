@@ -8,8 +8,8 @@
       dest: /etc/yum.repos.d/mongo.repo
   - name: Install mongodb-org 
     ansible.builtin.yum:
-      - name: mongodb-org
-        state: installed
+      name: mongodb-org
+      state: installed
   - name: remote connection enable
     ansible.builtin.replace:
     path: /etc/mongod.conf
@@ -17,6 +17,6 @@
     replace: '0.0.0.0'
   - name: start and enable mongo      
     ansible.builtin.service:
-      - name: start mongod
-        state: started   
-        enabled: yes
+      name: start mongod
+      state: started   
+      enabled: yes
