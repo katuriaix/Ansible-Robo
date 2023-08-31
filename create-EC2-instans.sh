@@ -1,7 +1,7 @@
 #!/bin/bash
 
 NAMES=$@
-INSTANCE_TYPE=""
+INSTANCE_TYPE="t2.micro"
 IMAGE_ID=ami-03265a0778a880afb
 SECURITY_GROUP_ID=sg-0be3218478ca5a153
 DOMAIN_NAME=katuri395.online
