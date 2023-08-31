@@ -1,0 +1,52 @@
+- name: install catalogue
+  hosts: Catalogue
+  become: yes
+  tasks:
+  - name: catalogue command module
+    ansible.builtin.shell: "curl -sL https://rpm.nodesource.com/setup_lts.x | bash"
+  - name: install cataloge
+    ansible.builtin.yum:
+      name: nodejs
+      state: installed
+  - name: user add
+    ansible.builtin.user:
+      name: roboshop
+  - name: create dir
+    ansible.builtin.file:
+      path: /app
+  - name: download catalogue artifact
+    ansible.builtin.get_url: 
+      url: https://roboshop-builds.s3.amazonaws.com/catalogue.zip
+      dest: /tmp
+  - name: extract catalogue artifact
+    ansible.builtin.unarchive:
+      src: /tmp/catalogue.zip
+      dest: /app
+      remote_src: yes
+  - name: install dependencies
+    ansible.builtin.command: npm install
+    args:
+      chdir: /app
+  - name: catalogue.service
+    ansible.builtin.copy:
+      src: catalogue.service
+      dest: /etc/systemd/system/catalogue.service
+  - name: demon reload
+    ansible.builtin.systemd:
+      name: daemon-reload
+      daemon_reload: true
+  - name: mongo.repo
+    ansible.builtin.copy:
+      src: mongo.repo
+      dest: /etc/yum.repos.d/mongo.repo
+  - name: mongodb-org-shell
+    ansible.builtin.yum:
+      name: mongodb-org-shell
+      state: installed
+  - name: load catalogue data
+    ansible.builtin.command: mongo --host mongo.katuri395.online < /app/schema/catalogue.js
+  - name: restart catalogue
+    ansible.builtin.service:
+      name: catalogue
+      state: restarted
+      enabled: true
