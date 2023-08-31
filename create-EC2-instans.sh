@@ -9,7 +9,7 @@ DOMAIN_NAME=katuri395.online
 
 # if mysql or mongodb instance_type should be t3.medium , for all others it is t2.micro
 
-for i in "${NAMES[@]}"
+for i in $@
 do  
 
     echo "creating $i instance"
