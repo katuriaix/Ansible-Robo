@@ -1,0 +1,21 @@
+- name: install mongoDB
+  hosts: mysql
+  become: yes
+  tasks: 
+  - name: Disable current MySQL version
+    ansible.builtin.command: yum module disable mysql -y
+  - name: mysql.repo
+    ansible.builtin.copy:
+      src: mysql.repo
+      dest: /etc/yum.repos.d/mysql.repo
+  - name: install mysql 
+    ansible.builtin.yum:
+      name: install mysql
+      state: installed
+  - name: start and enable mysqld
+    ansible.builtin.service:
+      name: mysqld
+      state: started
+      enabled: yes
+  - name: setup mysql root password
+    ansible.builtin.command: mysql_secure_installation --set-root-pass RoboShop@1
