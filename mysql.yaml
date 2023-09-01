@@ -1,4 +1,4 @@
-- name: install mongoDB
+- name: install mysql
   hosts: mysql
   become: yes
   tasks: 
@@ -12,7 +12,7 @@
     ansible.builtin.yum:
       name: mysql
       state: installed
-  - name: restart mysql
+  - name: restart mysqld
     ansible.builtin.service:
       name: mysqld
       state: started
