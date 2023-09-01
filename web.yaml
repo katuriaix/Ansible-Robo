@@ -18,11 +18,11 @@
   - name: Download the frontend content
     ansible.builtin.get_url:
       url: https://roboshop-builds.s3.amazonaws.com/web.zip
-      dest: /usr/share/nginx/html
-  - name: unzip
+      dest: /tmp
+  - name: extract catalogue artifactunzip
     ansible.builtin.unarchive:
       src: /tmp/web.zip
-      dest: /usr/local/bin
+      dest: /usr/share/nginx/html
       remote_src: yes
   - name: copy roboshop.conf
     ansible.builtin.copy:
