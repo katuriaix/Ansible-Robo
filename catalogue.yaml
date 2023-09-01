@@ -45,7 +45,7 @@
       name: mongodb-org-shell
       state: installed
   - name: load catalogue data
-    ansible.builtin.command: mongo --host mongo.katuri395.online < /app/schema/catalogue.js
+    ansible.builtin.command: mongo --host mongodb.katuri395.online < /app/schema/catalogue.js
   - name: restart catalogue
     ansible.builtin.service:
       name: catalogue
