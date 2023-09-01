@@ -14,7 +14,7 @@
       state: installed
   - name: start and enable mysql
     ansible.builtin.service:
-      name: mysql
+      name: mysqld
       state: started
       enabled: yes
   - name: setup mysql root password
