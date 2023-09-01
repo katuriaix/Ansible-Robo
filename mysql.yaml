@@ -10,7 +10,7 @@
       dest: /etc/yum.repos.d/mysql.repo
   - name: install mysql 
     ansible.builtin.yum:
-      name: install mysql
+      name: mysql
       state: installed
   - name: start and enable mysqld
     ansible.builtin.service:
