@@ -1,0 +1,19 @@
+- name: install rabbit
+  hosts: rabbit
+  become: yes
+  tasks:
+  - name: Configure YUM Repos from the script provided by vendor
+    ansible.builtin.shell: "curl -s https://packagecloud.io/install/repositories/rabbitmq/erlang/script.rpm.sh | bash"
+  - name: Repos for RabbitMQ
+    ansible.builtin.shell: "curl -s https://packagecloud.io/install/repositories/rabbitmq/rabbitmq-server/script.rpm.sh | bash"
+  - name: install rabbitMQ and start and enable rabbitMQ
+    ansible.buitin.yum:
+      name: rabbitmq-server
+      state: installed
+      state: started
+      enabled: yes
+  - name: useradd roboshop
+    ansible.buitin.user:
+      name: roboshop
+      password: roboshop123
+
