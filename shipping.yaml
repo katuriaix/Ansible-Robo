@@ -6,20 +6,37 @@
     ansible.builtin.yum:
       name: maven
       state: installed
+
   - name: user add
     ansible.builtin.user:
       name: roboshop
+
   - name: create dir
     ansible.builtin.file:
       path: /app
       state: directory
 
+  - when: out.rc != 0
+    name: create user roboshop
+    become: yes # we need sudo access for this task only
+    ansible.builtin.user:
+      name: roboshop
+
+  - name: check /app directory exists or not
+    ansible.builtin.stat:
+      path: /app
+    register: directory
+
+  - name: print the directory stats
+    ansible.builtin.debug:
+      msg: "output: {{directory}}"
+      
   - when: directory.stat.exists == False
     name: create /app directory
     ansible.builtin.file:
       path: /app
       state: directory
-      
+
   - name: download catalogue artifact
     ansible.builtin.get_url: 
       url: https://roboshop-builds.s3.amazonaws.com/catalogue.zip
