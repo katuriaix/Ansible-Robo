@@ -1,14 +1,14 @@
 - name: install redis
-  hosts: redias
+  hosts: redis
   become: yes
   task:
-  - name: redias install command line
+  - name: redis install command line
     ansible.builtin.command: https://rpms.remirepo.net/enterprise/remi-release-8.rpm
-  - name: enable 6.2 redias
+  - name: enable 6.2 redis
     ansible.builtin.service:
       name: redis:remi-6.2
       state: enabled
-  - name: install redias
+  - name: install redis
     ansible.builtin.yum:
       name: redis
       state: installed
