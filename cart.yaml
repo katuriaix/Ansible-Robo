@@ -1,0 +1,53 @@
+- name: install cart
+  hosts: cart
+  become: yes
+  tasks:
+  - name: cart command module
+    ansible.builtin.shell: "curl -sL https://rpm.nodesource.com/setup_lts.x | bash"
+  - name: install cataloge
+    ansible.builtin.yum:
+      name: nodejs
+      state: installed
+  - name: user add
+    ansible.builtin.user:
+      name: roboshop
+  - name: create dir
+    ansible.builtin.file:
+      path: /app
+      state: directory
+  - name: download cart artifact
+    ansible.builtin.get_url: 
+      url: https://roboshop-builds.s3.amazonaws.com/cart.zip
+      dest: /tmp
+  - name: extract cart artifact
+    ansible.builtin.unarchive:
+      src: /tmp/cart.zip
+      dest: /app
+      remote_src: yes
+  - name: install dependencies
+    ansible.builtin.command: npm install
+    args:
+      chdir: /app
+  - name: cart.service
+    ansible.builtin.copy:
+      src: cart.service
+      dest: /etc/systemd/system/cart.service
+  - name: demon reload
+    ansible.builtin.systemd:
+      name: daemon-reload
+      daemon_reload: true
+  # - name: mongo.repo
+  #   ansible.builtin.copy:
+  #     src: mongo.repo
+  #     dest: /etc/yum.repos.d/mongo.repo
+  # - name: mongodb-org-shell
+  #   ansible.builtin.yum:
+  #     name: mongodb-org-shell
+  # #     state: installed
+  # - name: load cart data
+  #   ansible.builtin.command: mongo --host mongodb.katuri395.online < /app/schema/cart.js
+  - name: restart cart
+    ansible.builtin.service:
+      name: cart
+      state: restarted
+      enabled: true
