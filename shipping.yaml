@@ -1,8 +1,8 @@
-- name: install shipping
+- name: Install Shipping component
   hosts: shipping
   become: yes
   tasks:
-  - name: Install maven
+  - name: Install Maven
     ansible.builtin.yum:
       name: maven
       state: installed
@@ -33,14 +33,9 @@
       path: /app
       state: directory
 
-  - name: download catalogue artifact
-    ansible.builtin.get_url: 
-      url: https://roboshop-builds.s3.amazonaws.com/catalogue.zip
-      dest: /tmp
-
-  - name: extract catalogue artifact
+  - name: Download shipping and extract
     ansible.builtin.unarchive:
-      src: /tmp/catalogue.zip
+      src: https://roboshop-builds.s3.amazonaws.com/shipping.zip
       dest: /app
       remote_src: yes
 
@@ -70,7 +65,7 @@
 
   - name: load mysql schema
     ansible.builtin.shell: mysql -h mysql.katuri395.online -uroot -pRoboShop@1 < /app/schema/shipping.sql 
-
+  
   - name: restart shipping
     ansible.builtin.service:
       name: shipping
